@@ -9,6 +9,8 @@ class Course(models.Model):
     description = models.TextField(verbose_name='описание')
     preview = models.ImageField(upload_to='course/', verbose_name='превью', default='no photo')
 
+    objects = models.Manager()
+
     def __str__(self):
         return f'{self.title}, {self.description}'
 

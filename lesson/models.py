@@ -1,5 +1,6 @@
 from django.db import models
 
+from course.models import Course
 from users.models import NULLABLE
 
 
@@ -9,6 +10,9 @@ class Lesson(models.Model):
     description = models.TextField(verbose_name='описание')
     photo = models.ImageField(upload_to='lessons/', verbose_name='фото', default='no lesson photo')
     video_link = models.CharField(max_length=150, verbose_name='ссылка', **NULLABLE)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, verbose_name='курсы', **NULLABLE)
+
+    objects = models.Manager()
 
     def __str__(self):
         return f'{self.title},{self.description}'

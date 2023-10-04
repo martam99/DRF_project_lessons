@@ -22,7 +22,8 @@ from config import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('user/', include('users.urls', namespace='users')),
+    path('users/', include('users.urls', namespace='users')),
     path('course/', include('course.urls', namespace='course')),
     path('lesson/', include('lesson.urls', namespace='lesson')),
+    path('payments/', include('payments.urls', namespace='payments')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
