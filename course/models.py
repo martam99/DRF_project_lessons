@@ -12,7 +12,7 @@ class Course(models.Model):
     objects = models.Manager()
 
     def __str__(self):
-        return f'{self.title}, {self.description}'
+        return f'{self.title}'
 
     class Meta:
         verbose_name = 'course'

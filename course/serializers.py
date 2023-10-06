@@ -6,7 +6,7 @@ from lesson.serializers import LessonSerializer
 
 class CourseSerializer(serializers.ModelSerializer):
     lesson_count = serializers.SerializerMethodField()
-    lessons = LessonSerializer(read_only=True)
+    lessons = LessonSerializer(source='lesson_set', read_only=True, many=True)
 
     def get_lesson_count(self, obj):
         obj = Lesson.objects.all()
@@ -14,4 +14,4 @@ class CourseSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Course
-        fields = ['title', 'description', 'lessons', 'lesson_count']
+        fields = ['title', 'description', 'preview', 'lesson_count', 'lessons', ]

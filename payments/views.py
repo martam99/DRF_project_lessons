@@ -1,5 +1,5 @@
-from django.shortcuts import render
-from rest_framework import viewsets
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import viewsets, filters
 from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.generics import ListAPIView
 
@@ -18,6 +18,6 @@ class PaymentViewSet(viewsets.ModelViewSet):
 class PaymentListAPIView(ListAPIView):
     queryset = Payment.objects.all()
     serializer_class = PaymentSerializer
-    filter_backends = [SearchFilter, OrderingFilter]
-    search_fields = ['paid_course', 'payment_method']
+    filter_backends = [DjangoFilterBackend, OrderingFilter]
+    filterset_fields = ('paid_course', 'payment_method')
     ordering_fields = ['payment_date']

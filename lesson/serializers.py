@@ -6,6 +6,6 @@ from lesson.models import Lesson
 class LessonSerializer(serializers.ModelSerializer):
     class Meta:
         model = Lesson
-        fields = '__all__'
+        fields = ('title', 'description', 'video_link')
 
 
