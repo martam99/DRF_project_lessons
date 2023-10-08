@@ -1,7 +1,7 @@
 from django.db import models
 
 from course.models import Course
-from users.models import NULLABLE
+from users.models import NULLABLE, User
 
 
 # Create your models here.
@@ -11,7 +11,7 @@ class Lesson(models.Model):
     photo = models.ImageField(upload_to='lessons/', verbose_name='фото', default='no lesson photo')
     video_link = models.CharField(max_length=150, verbose_name='ссылка', **NULLABLE)
     course = models.ForeignKey(Course, on_delete=models.CASCADE, verbose_name='курсы', **NULLABLE)
-
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='владелец', blank=True, null=True)
     objects = models.Manager()
 
     def __str__(self):
