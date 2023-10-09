@@ -12,31 +12,33 @@ class LessonCreateAPIView(generics.CreateAPIView):
     permission_classes = [IsAuthenticated | IsNotModerator]
 
     def perform_create(self, serializer):
-        lesson = serializer.save
+        lesson = serializer.save()
         lesson.owner = self.request.user
-        lesson.save(
-        )
+        lesson.save()
 
 
 class LessonListAPIView(generics.ListAPIView):
     queryset = Lesson.objects.all()
     serializer_class = LessonSerializer
     permission_classes = [IsOwner]
+    lookup_field = 'id'
 
 
 class LessonRetrieveAPIView(generics.RetrieveAPIView):
     queryset = Lesson.objects.all()
     serializer_class = LessonSerializer
     permission_classes = [IsOwner]
+    lookup_field = 'id'
 
 
 class LessonUpdateAPIView(generics.UpdateAPIView):
     queryset = Lesson.objects.all()
     serializer_class = LessonSerializer
     permission_classes = [IsOwner]
+    lookup_field = 'id'
 
 
 class LessonDestroyAPIView(generics.DestroyAPIView):
     queryset = Lesson.objects.all()
     permission_classes = [IsOwner | IsNotModerator]
-
+    lookup_field = 'id'

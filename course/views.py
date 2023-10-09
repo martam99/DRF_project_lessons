@@ -11,6 +11,7 @@ from users.permissions import IsNotModerator, IsOwner
 class CourseViewSet(viewsets.ModelViewSet):
     serializer_class = CourseSerializer
     queryset = Course.objects.all()
+    lookup_field = 'id'
 
     def get_permissions(self):
         if self.request.method in ['CREATE', 'DELETE']:
@@ -20,6 +21,6 @@ class CourseViewSet(viewsets.ModelViewSet):
         return super(CourseViewSet, self).get_permissions()
 
     def perform_create(self, serializer):
-        course = serializer.save
+        course = serializer.save()
         course.owner = self.request.user
         course.save()
