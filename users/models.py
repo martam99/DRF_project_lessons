@@ -18,6 +18,7 @@ class User(AbstractUser):
     country = models.CharField(max_length=150, verbose_name='Страна', **NULLABLE)
     avatar = models.ImageField(upload_to='users/', verbose_name='фото', default='no photo')
     is_active = models.BooleanField(default=True, verbose_name='activity')
+    role = models.CharField(max_length=30, verbose_name='role', choices=UserRole.choices, default='member')
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
