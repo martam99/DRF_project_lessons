@@ -5,6 +5,12 @@ NULLABLE = {'blank': True, 'null': True}
 
 
 # Create your models here.
+class UserRole(models.TextChoices):
+    MODERATOR = 'moderator'
+    MEMBER = 'member'
+
+
+# Create your models here.
 class User(AbstractUser):
     username = None
     email = models.EmailField(max_length=100, verbose_name='Почта', unique=True)
