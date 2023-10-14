@@ -1,5 +1,6 @@
 from rest_framework.permissions import BasePermission
 
+from course.models import Subscriber
 from users.models import User, UserRole
 
 user = User()
@@ -23,3 +24,8 @@ class IsNotModerator(BasePermission):
     def has_permission(self, request, view):
         return not user.groups.filter(name='Moderator')
 
+
+class IsSubscriber(BasePermission):
+    def has_permission(self, request, view):
+        if Subscriber.is_subscribed:
+            return True

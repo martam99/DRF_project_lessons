@@ -2,9 +2,10 @@ from django.shortcuts import render
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 
+from course.paginators import CourseLessonPaginator
 from lesson.models import Lesson
 from lesson.serializers import LessonSerializer
-from users.permissions import IsNotModerator, IsOwner, IsModerator
+from users.permissions import IsNotModerator, IsOwner, IsModerator, IsSubscriber
 
 
 class LessonCreateAPIView(generics.CreateAPIView):
@@ -20,13 +21,14 @@ class LessonCreateAPIView(generics.CreateAPIView):
 class LessonListAPIView(generics.ListAPIView):
     serializer_class = LessonSerializer
     queryset = Lesson.objects.all()
-    permission_classes = [IsAuthenticated, IsModerator]
+    permission_classes = [IsAuthenticated, IsModerator | IsSubscriber]
+    pagination_class = CourseLessonPaginator
 
 
 class LessonRetrieveAPIView(generics.RetrieveAPIView):
     queryset = Lesson.objects.all()
     serializer_class = LessonSerializer
-    permission_classes = [IsOwner]
+    permission_classes = [IsOwner | IsSubscriber]
 
 
 class LessonUpdateAPIView(generics.UpdateAPIView):
