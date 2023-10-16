@@ -90,6 +90,7 @@ class CourseTestCase(APITestCase):
             reverse('course:subscribers-create'),
             data=data
         )
+        print(response)
         self.assertEqual(
             response.status_code,
             status.HTTP_201_CREATED
