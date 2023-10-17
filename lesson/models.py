@@ -11,7 +11,7 @@ class Lesson(models.Model):
     photo = models.ImageField(upload_to='lessons/', verbose_name='фото', default='no lesson photo')
     video_link = models.CharField(max_length=150, verbose_name='ссылка', **NULLABLE)
     course = models.ForeignKey(Course, on_delete=models.CASCADE, verbose_name='курсы', **NULLABLE)
-    owner = models.ManyToManyField(User, verbose_name='владелец')
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='владелец', **NULLABLE)
     objects = models.Manager()
 
     def __str__(self):
