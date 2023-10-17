@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'lesson',
     'payments',
     'django_filters',
+    'drf_yasg',
 ]
 
 REST_FRAMEWORK = {

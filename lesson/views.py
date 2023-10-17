@@ -16,6 +16,7 @@ class LessonCreateAPIView(generics.CreateAPIView):
         lesson = serializer.save()
         lesson.owner = self.request.user
         lesson.save()
+        return super().perform_create(serializer)
 
 
 class LessonListAPIView(generics.ListAPIView):
