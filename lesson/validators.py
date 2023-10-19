@@ -8,5 +8,8 @@ class LinkValidator:
     def __call__(self, field):
         link = 'youtube.com'
         val = dict(field).get(self.field)
-        if link not in val:
-            raise ValidationError('Please, write YouTube link')
+        if val:
+            if link not in val:
+                raise ValidationError('Please, write YouTube link')
+        else:
+            return f'please, write link'

@@ -34,7 +34,7 @@ class CourseViewSet(viewsets.ModelViewSet):
 
 class SubscriberCreateAPIView(generics.CreateAPIView):
     serializer_class = SubscriberSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated | IsOwner]
 
 
 class SubscriberDeleteAPIView(generics.DestroyAPIView):

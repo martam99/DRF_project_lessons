@@ -8,7 +8,7 @@ from users.models import NULLABLE, User
 class Lesson(models.Model):
     title = models.CharField(max_length=150, verbose_name='название')
     description = models.TextField(verbose_name='описание')
-    photo = models.ImageField(upload_to='lessons/', verbose_name='фото', default='no lesson photo')
+    photo = models.ImageField(upload_to='lessons/', verbose_name='фото', **NULLABLE)
     video_link = models.CharField(max_length=150, verbose_name='ссылка', **NULLABLE)
     course = models.ForeignKey(Course, on_delete=models.CASCADE, verbose_name='курсы', **NULLABLE)
     owner = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='владелец', **NULLABLE)
