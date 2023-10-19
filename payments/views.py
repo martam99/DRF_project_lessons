@@ -3,6 +3,9 @@ from rest_framework import viewsets
 from rest_framework.filters import OrderingFilter
 from rest_framework.generics import ListAPIView
 import stripe
+from rest_framework.response import Response
+from rest_framework.views import APIView
+
 from payments.models import Payment
 from payments.serializers import PaymentSerializer
 
@@ -39,6 +42,16 @@ class PaymentViewSet(viewsets.ModelViewSet):
         )
         view_pay.save()
         return view_pay
+
+
+class GetPaymentView(APIView):
+    """Получение информации о платеже."""
+
+    def get(self, request, payment_id):
+        stripe.api_key = "sk_test_51O1qLFBHY2SJrLQNMAVkem1Pf577FhF0uH6AG6OkOJc7sshbPCIBvtfA7Te1YH4NwGIeJng75rmtJGt2K1d2arDm008V9TmqjN"
+        payment_intent = stripe.PaymentIntent.retrieve(payment_id)
+        return Response({
+            'status': payment_intent.status, })
 
 
 class PaymentListAPIView(ListAPIView):
