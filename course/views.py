@@ -1,3 +1,5 @@
+from django.conf import settings
+from django.core.mail import send_mail
 from django.shortcuts import render
 from rest_framework import viewsets, generics
 from rest_framework.permissions import IsAuthenticated
@@ -20,7 +22,7 @@ class CourseViewSet(viewsets.ModelViewSet):
         return self.get_paginated_response(serializer.data)
 
     def get_permissions(self):
-        if self.request.method in ['CREATE', 'DELETE']:
+        if self.request.method in ['CREATE', 'DELETE', 'UPDATE']:
             self.permission_classes = [IsOwner, IsNotModerator]
         else:
             self.permission_classes = [IsOwner | IsSubscriber]
@@ -30,6 +32,19 @@ class CourseViewSet(viewsets.ModelViewSet):
         course = serializer.save()
         course.owner = self.request.user
         course.save()
+
+
+class CourseUpdateAPIView(generics.UpdateAPIView):
+    queryset = Course.objects.all()
+    serializer_class = CourseSerializer
+
+    def sending(self):
+        send_mail(
+            subject=f'Обновление курса',
+            message='Курс, на который вы подписаны обновился. Предлагаем посмотреть обновление на нашем сайте .',
+            from_email=settings.EMAIL_HOST_USER,
+            recipient_list=[Subscriber.objects.user]
+        )
 
 
 class SubscriberCreateAPIView(generics.CreateAPIView):

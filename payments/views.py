@@ -1,7 +1,7 @@
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import viewsets
+from rest_framework import viewsets, generics
 from rest_framework.filters import OrderingFilter
-from rest_framework.generics import ListAPIView
+from rest_framework.generics import ListAPIView, CreateAPIView
 import stripe
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -23,35 +23,34 @@ class PaymentViewSet(viewsets.ModelViewSet):
         payment.save()
         return super().perform_create(serializer)
 
-    def create_payment(self):
+
+class PaymentCreateAPIView(generics.CreateAPIView):
+    """Контроллер для создания платежа"""
+    queryset = Payment.objects.all()
+    serializer_class = PaymentSerializer
+
+    def perform_create(self, serializer):
+        """Метод для создания объекта PaymentIntent"""
+        payment = serializer.save()
         stripe.api_key = "sk_test_51O1qLFBHY2SJrLQNMAVkem1Pf577FhF0uH6AG6OkOJc7sshbPCIBvtfA7Te1YH4NwGIeJng75rmtJGt2K1d2arDm008V9TmqjN"
         pay = stripe.PaymentIntent.create(
-            amount=self.queryset.payment_sum,
+            amount=payment.payment_sum,
             currency="usd",
             automatic_payment_methods={"enabled": True},
-            course=self.queryset.paid_course,
-            user=self.queryset.user,
-            card=self.queryset.card
         )
         pay.save()
-
-    def view_payment(self):
-        stripe.api_key = "sk_test_51O1qLFBHY2SJrLQNMAVkem1Pf577FhF0uH6AG6OkOJc7sshbPCIBvtfA7Te1YH4NwGIeJng75rmtJGt2K1d2arDm008V9TmqjN"
-        view_pay = stripe.PaymentIntent.retrieve(
-            Payment.objects.id
-        )
-        view_pay.save()
-        return view_pay
+        return super().perform_create(serializer)
 
 
 class GetPaymentView(APIView):
     """Получение информации о платеже."""
-
     def get(self, request, payment_id):
+        """Метод для получения информации о платеже"""
         stripe.api_key = "sk_test_51O1qLFBHY2SJrLQNMAVkem1Pf577FhF0uH6AG6OkOJc7sshbPCIBvtfA7Te1YH4NwGIeJng75rmtJGt2K1d2arDm008V9TmqjN"
         payment_intent = stripe.PaymentIntent.retrieve(payment_id)
         return Response({
-            'status': payment_intent.status, })
+            'status': payment_intent.status,
+            'body': payment_intent})
 
 
 class PaymentListAPIView(ListAPIView):
