@@ -1,7 +1,7 @@
 from django.db import models
 from django.utils import timezone
 
-from users.models import User
+from users.models import User, NULLABLE
 
 
 # Create your models here.
@@ -27,6 +27,7 @@ class Subscriber(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE, verbose_name='курс')
     start_date = models.DateTimeField(verbose_name='дата подписки', default=timezone.now)
     is_subscribed = models.BooleanField(verbose_name='статус', default=True)
+    email = models.EmailField(verbose_name='почта', **NULLABLE)
 
     objects = models.Manager()
 

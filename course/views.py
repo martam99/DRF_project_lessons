@@ -7,6 +7,7 @@ from rest_framework.permissions import IsAuthenticated
 from course.models import Course, Subscriber
 from course.paginators import CourseLessonPaginator
 from course.serializers import CourseSerializer, SubscriberSerializer
+from course.tasks import send_mailing
 from users.permissions import IsNotModerator, IsOwner, IsSubscriber
 
 
@@ -38,13 +39,11 @@ class CourseUpdateAPIView(generics.UpdateAPIView):
     queryset = Course.objects.all()
     serializer_class = CourseSerializer
 
-    def sending(self):
-        send_mail(
-            subject=f'Обновление курса',
-            message='Курс, на который вы подписаны обновился. Предлагаем посмотреть обновление на нашем сайте .',
-            from_email=settings.EMAIL_HOST_USER,
-            recipient_list=[Subscriber.objects.user]
-        )
+    def perform_update(self, serializer):
+        serializer.save()
+        sub = Subscriber.objects.get('email')
+        send_mailing.delay(sub, Course)
+        return super().perform_update(serializer)
 
 
 class SubscriberCreateAPIView(generics.CreateAPIView):
