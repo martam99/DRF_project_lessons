@@ -17,5 +17,4 @@ PeriodicTask.objects.create(
     kwargs=json.dumps({
         'be_careful': True,
     }),
-    expires=datetime.utcnow() + timedelta(seconds=30)
 )

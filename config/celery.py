@@ -13,7 +13,7 @@ app.autodiscover_tasks()
 
 app.conf.beat_schedule = {
     'every': {
-        'task': ('course.tasks.send_mailing', 'users.tasks.block_user'),
+        'task': 'users.tasks.block_user',
         'schedule': crontab(),
     },
 }
