@@ -19,7 +19,8 @@ services:
   app:
     build: .
     tty: true
-    command: python manage.py migrate && python manage.py runserver 0.0.0.0:8000
+    command: sh -c "python manage.py migrate &&
+         python manage.py runserver 0.0.0.0:8000"
     ports:
       - '8000:8000'
     depends_on:
@@ -29,7 +30,7 @@ services:
     build: .
     tty: true
     command:
-      - python.exe -m celery -A config worker -l INFO
+      celery -A config worker -l INFO
     depends_on:
       - redis
       - app
